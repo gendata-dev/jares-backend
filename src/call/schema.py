@@ -14,15 +14,17 @@ dial_duration	integer	전체통화시간 (초) - 다이얼시간 포함
 hangup_disposition	string	어디에서(수/발신) 전화를 종료 했는지
 cause	string	통화종료 코드
 """
+
+
 # TODO: use datetime type?
 class CallDetailRecord(TypedDict):
     call_id: str
     t_id: str
     caller: str
     callee: str
-    start_time: str # datetime
-    answer_time: str # datetime
-    end_time: str # datetime
+    start_time: str  # datetime
+    answer_time: str  # datetime
+    end_time: str  # datetime
     duration: int
     dial_duration: int
     hangup_disposition: str
@@ -36,13 +38,15 @@ callee	string	착신번호		                                    01011112222
 direction	string	수/발신 구분		                            inbound
 answer_time	string	전화 받은 시간		                             2023-01-01 00:00:00
 """
+
+
 class AnswerRecord(TypedDict):
     call_id: str
     t_id: str
     caller: str
     callee: str
-    direction: str # inbound
-    answer_time: str # datetime
+    direction: str  # inbound
+    answer_time: str  # datetime
 
 
 """

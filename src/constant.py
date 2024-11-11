@@ -8,5 +8,5 @@ SERVER_LOG_FOLDER = os.path.join(LOG_FOLDER, "server_log")
 SERVER_LOG_FILE = "logging.log"
 
 """ 로그 포맷 """
-LOG_FORMAT = '%(asctime)s - %(levelname)s - %(message)s'
-DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
+LOG_FORMAT = "%(asctime)s - %(levelname)s - %(message)s"
+DATE_FORMAT = "%Y-%m-%d %H:%M:%S"

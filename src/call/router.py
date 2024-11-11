@@ -4,8 +4,9 @@ from call.service import CallStarter, AnswerHandler, QuestionPreparer, CallEnder
 from call.schema import CallDetailRecord, AnswerRecord
 
 
-""" BASE_URL/call-management """
 router = APIRouter()
+""" BASE_URL/v1 """
+
 
 @router.post("/calls")
 async def post_call():
@@ -14,14 +15,16 @@ async def post_call():
     """
     return await CallStarter.start_call()
 
-@router.post("/calls/answer")
+
+@router.post("/answer")
 async def handle_answer(answer_data: AnswerRecord):
     """
     수신 응답 받은 경우 호출
     """
     return await AnswerHandler.handle_answer(answer_data)
 
-@router.post("/calls/hangup")
+
+@router.post("/hangup")
 async def hangup_call(call_record: CallDetailRecord):
     """
     통화 종료 시 호출
@@ -29,7 +32,8 @@ async def hangup_call(call_record: CallDetailRecord):
     """
     return await CallEnder.end_call(call_record)
 
-@router.post('/calls/interact')
+
+@router.post("/talk")
 async def handle_talk():
     """
     질문과 답변의 상호작용

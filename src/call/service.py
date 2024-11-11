@@ -18,29 +18,33 @@ from constant import CALL_LOG_FOLDER
 발신 -> 수신 대기 -> 수신 -> 대화 -> 종료
     -> dial -> answer -> talk -> hangup
 """
+
+
 # TODO: response가 지저분하다
 class AnswerHandler:
-    """ 수신 응답 시 호출 """
+    """수신 응답 시 호출"""
 
     # TODO: 데이터 보관? 로그의 내용이 부족하진 않은지? 전화번호 추가 등등
     @classmethod
     async def handle_answer(cls, answer_data: AnswerRecord):
         logging.info(
-                "Answer received."
-                + " Call ID: "
-                + answer_data.get("call_id")
-                + " Answer Time: "
-                + answer_data.get("answer_time")
-                + " Direction: "
-                + answer_data.get("direction")
-            )
-        
-        return JSONResponse(content={
-            "response_message": {
-                "code": "0000",
-                "message": "success",
+            "Answer received."
+            + " Call ID: "
+            + answer_data.get("call_id")
+            + " Answer Time: "
+            + answer_data.get("answer_time")
+            + " Direction: "
+            + answer_data.get("direction")
+        )
+
+        return JSONResponse(
+            content={
+                "response_message": {
+                    "code": "0000",
+                    "message": "success",
+                }
             }
-        })
+        )
 
 
 class CallStarter:
@@ -54,18 +58,19 @@ class QuestionPreparer:
 
 
 class CallEnder:
-    """ 전화 종료 시 호출 """
+    """전화 종료 시 호출"""
 
     @classmethod
     async def end_call(cls, call_record: CallDetailRecord):
-        """ 전화 기록을 csv 파일로 기록 """
+        """전화 기록을 csv 파일로 기록"""
         await cls.store_csv_file(call_record)
 
         return JSONResponse(
             content={
                 "status": "success",
                 "message": "Hangup request processed",
-            })
+            }
+        )
 
     @classmethod
     async def store_csv_file(cls, call_record: CallDetailRecord):
@@ -76,7 +81,7 @@ class CallEnder:
 
         call_id는 unique한 uuid4 값
         같은 이름의 파일이 생기지 않음
-        
+
         드물게 같은 이름의 파일이 생길 경우
         값을 덮어씌운다
         """
@@ -88,7 +93,7 @@ class CallEnder:
             os.makedirs(CALL_LOG_FOLDER)
 
         try:
-            with open(file_path, mode='w', newline='') as file:
+            with open(file_path, mode="w", newline="") as file:
                 writer = csv.writer(file)
                 writer.writerow(call_record.keys())
                 writer.writerow(call_record.values())
@@ -98,17 +103,16 @@ class CallEnder:
             logging.error(f"Permission denied {file_path}")
             raise HTTPException(
                 status_code=403,
-                detail="Permission denied: Unable to write to the file at the specified path."
+                detail="Permission denied: Unable to write to the file at the specified path.",
             )
         except FileNotFoundError:
             logging.error(f"File not found {file_path}")
             raise HTTPException(
                 status_code=404,
-                detail="File path not found or the directory does not exist."
+                detail="File path not found or the directory does not exist.",
             )
         except OSError as e:
             logging.error(f"OSError {file_path}: {e}")
             raise HTTPException(
-                status_code=500,
-                detail=f"An unexpected error occurred: {e.strerror}"
+                status_code=500, detail=f"An unexpected error occurred: {e.strerror}"
             )
