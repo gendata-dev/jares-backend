@@ -1,12 +1,12 @@
 import os
 import csv
 import logging
-from fastapi import HTTPException
+from fastapi import HTTPException, Depends
 from fastapi.responses import JSONResponse
 
-from call.schema import CallDetailRecord, AnswerRecord
-
-from constant import CALL_LOG_FOLDER
+from config import RepositoryConfig, LogConfig
+from call.schema import CallDetailRecord, AnswerRecord, TalkRecord
+from call.repository import CallRepository
 
 
 """
@@ -21,12 +21,17 @@ from constant import CALL_LOG_FOLDER
 
 
 # TODO: response가 지저분하다
-class AnswerHandler:
+class AnswerHandleService:
     """수신 응답 시 호출"""
 
+    async def __init__(
+        self, call_repo: CallRepository = Depends(RepositoryConfig.get_call_repository)
+    ) -> None:
+        # self.repo = repo
+        pass
+
     # TODO: 데이터 보관? 로그의 내용이 부족하진 않은지? 전화번호 추가 등등
-    @classmethod
-    async def handle_answer(cls, answer_data: AnswerRecord):
+    async def handle_answer(self, answer_data: AnswerRecord):
         logging.info(
             "Answer received."
             + " Call ID: "
@@ -47,23 +52,37 @@ class AnswerHandler:
         )
 
 
-class CallStarter:
-    async def start_call(cls):
+class CallStartService:
+    async def start_call(self):
         print("Starting call")
 
 
-class QuestionPreparer:
-    async def prepare_next_question(cls, call_id: str):
-        print(f"Preparing next question for call {call_id}")
+class QuestionPrepareService:
+    def __init__(
+        self, call_repo: CallRepository = Depends(RepositoryConfig.get_call_repository)
+    ) -> None:
+        print("QuestionPrepareService initialized")
+        self.repo = call_repo
+        pass
+
+    async def prepare_sentence(self, conversation: TalkRecord):
+        print(conversation)
+        await self.repo.save(conversation)
+        print("REPO:", self.repo)
 
 
-class CallEnder:
+class CallEndService:
     """전화 종료 시 호출"""
 
-    @classmethod
-    async def end_call(cls, call_record: CallDetailRecord):
+    def __init__(
+        self, call_repo: CallRepository = Depends(RepositoryConfig.get_call_repository)
+    ) -> None:
+        print("Call Ender initialized")
+        self.call_repo = call_repo
+
+    async def end_call(self, call_record: CallDetailRecord):
         """전화 기록을 csv 파일로 기록"""
-        await cls.store_csv_file(call_record)
+        await self.store_csv_file(call_record)
 
         return JSONResponse(
             content={
@@ -72,8 +91,7 @@ class CallEnder:
             }
         )
 
-    @classmethod
-    async def store_csv_file(cls, call_record: CallDetailRecord):
+    async def store_csv_file(self, call_record: CallDetailRecord):
         """
         csv 파일을 저장하는 함수
         프로젝트의 경로에 /call_log 디렉토리에
@@ -85,12 +103,13 @@ class CallEnder:
         드물게 같은 이름의 파일이 생길 경우
         값을 덮어씌운다
         """
+        call_log_folder = LogConfig.CALL_LOG_FOLDER
         call_id = call_record.get("call_id")
-        file_path = os.path.join(CALL_LOG_FOLDER, f"{call_id}.csv")
+        file_path = os.path.join(call_log_folder, f"{call_id}.csv")
 
-        if not os.path.exists(CALL_LOG_FOLDER):
-            logging.error(f"Directory was deleted {CALL_LOG_FOLDER}")
-            os.makedirs(CALL_LOG_FOLDER)
+        if not os.path.exists(call_log_folder):
+            logging.error(f"Directory was deleted {call_log_folder}")
+            os.makedirs(call_log_folder)
 
         try:
             with open(file_path, mode="w", newline="") as file:

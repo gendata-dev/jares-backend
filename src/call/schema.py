@@ -45,12 +45,11 @@ class AnswerRecord(TypedDict):
     t_id: str
     caller: str
     callee: str
-    direction: str  # inbound
+    direction: str
     answer_time: str  # datetime
 
 
 """
-
 call_id	    string  call unique id	uuid4	
 t_id	    string	t_id	        미사용	
 play_status	string	"멘트 재생 상태* barge in 으로 멘트 중지 'break'"	done | break	break
@@ -116,63 +115,27 @@ stt_detail	string	stt 결과 상세		"[
 			],
 			"textEdited": "추천을 하는 게 뭐 좋은 건지 모르겠어요. 이게."
 		}
-	]"stt_detail	string	    stt 결과 상세		"[
-		{
-			"start": 0,
-			"end": 5688,
-			"text": "추천을 하는 게 뭐 좋은 건지 모르겠어요. 이게.",
-			"confidence": 0.9725,
-			"diarization": {
-				"label": ""
-			},
-			"speaker": {
-				"label": "",
-				"name": "",
-				"edited": false
-			},
-			"words": [
-				[
-					1450,
-					1900,
-					"추천을"
-				],
-				[
-					1910,
-					2220,
-					"하는"
-				],
-				[
-					2230,
-					2380,
-					"게"
-				],
-				[
-					2730,
-					2880,
-					"뭐"
-				],
-				[
-					3090,
-					3300,
-					"좋은"
-				],
-				[
-					3370,
-					3660,
-					"건지"
-				],
-				[
-					3710,
-					4240,
-					"모르겠어요."
-				],
-				[
-					4630,
-					4900,
-					"이게."
-				]
-			],
-			"textEdited": "추천을 하는 게 뭐 좋은 건지 모르겠어요. 이게."
-		}
-	]"
+	]
 """
+
+"""
+call_id	    string  call unique id	uuid4	
+t_id	    string	t_id	        미사용	
+play_status	string	"멘트 재생 상태* barge in 으로 멘트 중지 'break'"	done | break	break
+stt	        string	stt 결과		'추천을 하는 게 뭐 좋은 건지 모르겠어요. 이게.'
+dtmf	    string	dtmf		1234
+dtmf_status	string	"dtmf 수집 상태* 요청한 자리수까지 수집된 경우 'done'"	done | timeout	done
+step	    string	테스트 용도 / 무시하셔도 됩니다.	추가	
+stt_detail	string	stt 결과 상세		"[
+"""
+
+
+class TalkRecord(TypedDict):
+    call_id: str
+    t_id: str
+    play_status: str  # done or break
+    stt: str
+    stt_detail: str
+    dtmf: str
+    dtmf_status: str
+    step: str
