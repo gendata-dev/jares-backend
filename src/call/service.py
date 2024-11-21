@@ -27,8 +27,7 @@ class AnswerHandleService:
     async def __init__(
         self, call_repo: CallRepository = Depends(RepositoryConfig.get_call_repository)
     ) -> None:
-        # self.repo = repo
-        pass
+        self.repo = call_repo
 
     # TODO: 데이터 보관? 로그의 내용이 부족하진 않은지? 전화번호 추가 등등
     async def handle_answer(self, answer_data: AnswerRecord):
@@ -45,6 +44,7 @@ class AnswerHandleService:
         return JSONResponse(
             content={
                 "response_message": {
+                    # Whats this for
                     "code": "0000",
                     "message": "success",
                 }
@@ -61,14 +61,10 @@ class QuestionPrepareService:
     def __init__(
         self, call_repo: CallRepository = Depends(RepositoryConfig.get_call_repository)
     ) -> None:
-        print("QuestionPrepareService initialized")
         self.repo = call_repo
-        pass
 
     async def prepare_sentence(self, conversation: TalkRecord):
-        print(conversation)
         await self.repo.save(conversation)
-        print("REPO:", self.repo)
 
 
 class CallEndService:
@@ -77,7 +73,6 @@ class CallEndService:
     def __init__(
         self, call_repo: CallRepository = Depends(RepositoryConfig.get_call_repository)
     ) -> None:
-        print("Call Ender initialized")
         self.call_repo = call_repo
 
     async def end_call(self, call_record: CallDetailRecord):

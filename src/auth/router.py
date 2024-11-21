@@ -1,10 +1,14 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, status
 
-# APIRouter 객체 생성
 router = APIRouter()
+"""BASE_URL/user-management"""
 
 
-# 라우트 정의
-@router.get("/example")
-async def example_route():
-    return {"message": "This is an example route"}
+@router.post("/token")
+async def create_token():
+    return {"token": "mock jwt", "role": "mock user"}
+
+
+@router.delete("/token", status_code=status.HTTP_201_CREATED)
+async def delete_token():
+    return {"message": "Logged out successfully"}
