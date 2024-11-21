@@ -1,5 +1,8 @@
+from sqlalchemy import Column, Integer, ForeignKey, JSON, TIMESTAMP
+from sqlalchemy.orm import relationship
+from sqlalchemy.sql import func
+from schema import Base
 from typing_extensions import TypedDict
-
 
 """
 call_id	string	call unique id
@@ -139,3 +142,18 @@ class TalkRecord(TypedDict):
     dtmf: str
     dtmf_status: str
     step: str
+
+
+class Answer(Base):
+    __tablename__ = "answers"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    question_id = Column(Integer, ForeignKey("questions.id"), nullable=False)
+    user_id = Column(Integer, ForeignKey("contacts.id"), nullable=False)
+    survey_id = Column(Integer, ForeignKey("surveys.id"), nullable=False)
+    answer_list = Column(JSON, nullable=False)
+    created_at = Column(TIMESTAMP(timezone=True), server_default=func.now())
+
+    user = relationship("Contact", back_populates="answers")
+    survey = relationship("Survey", back_populates="answers")
+    question = relationship("Question", back_populates="answers")
