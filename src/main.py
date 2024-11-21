@@ -12,7 +12,7 @@ from survey.router import router as survey_router
 from config import LogConfig
 
 
-def startup_event():
+def setup_log_environment():
     """서버 로그 폴더와 통화 로그 폴더 생성"""
     os.makedirs(LogConfig.LOG_FOLDER, exist_ok=True)
     os.makedirs(LogConfig.SERVER_LOG_FOLDER, exist_ok=True)
@@ -32,7 +32,7 @@ def startup_event():
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    startup_event()
+    setup_log_environment()
     yield
 
 
