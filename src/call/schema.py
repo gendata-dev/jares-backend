@@ -1,8 +1,9 @@
 from sqlalchemy import Column, Integer, ForeignKey, JSON, TIMESTAMP
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
-from schema import Base
 from typing_extensions import TypedDict
+
+from schema import Base
 
 """
 call_id	string	call unique id

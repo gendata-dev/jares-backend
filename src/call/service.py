@@ -1,12 +1,11 @@
 import os
 import csv
 import logging
-from fastapi import HTTPException, Depends
+from fastapi import HTTPException
 from fastapi.responses import JSONResponse
 
-from config import RepositoryConfig, LogConfig
+from config import LogConfig
 from call.schema import CallDetailRecord, AnswerRecord, TalkRecord
-from call.repository import CallRepository
 
 
 """
@@ -23,11 +22,6 @@ from call.repository import CallRepository
 # TODO: response가 지저분하다
 class AnswerHandleService:
     """수신 응답 시 호출"""
-
-    async def __init__(
-        self, call_repo: CallRepository = Depends(RepositoryConfig.get_call_repository)
-    ) -> None:
-        self.repo = call_repo
 
     # TODO: 데이터 보관? 로그의 내용이 부족하진 않은지? 전화번호 추가 등등
     async def handle_answer(self, answer_data: AnswerRecord):
@@ -58,22 +52,12 @@ class CallStartService:
 
 
 class QuestionPrepareService:
-    def __init__(
-        self, call_repo: CallRepository = Depends(RepositoryConfig.get_call_repository)
-    ) -> None:
-        self.repo = call_repo
-
     async def prepare_sentence(self, conversation: TalkRecord):
         await self.repo.save(conversation)
 
 
 class CallEndService:
     """전화 종료 시 호출"""
-
-    def __init__(
-        self, call_repo: CallRepository = Depends(RepositoryConfig.get_call_repository)
-    ) -> None:
-        self.call_repo = call_repo
 
     async def end_call(self, call_record: CallDetailRecord):
         """전화 기록을 csv 파일로 기록"""
