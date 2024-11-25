@@ -1,11 +1,13 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, TIMESTAMP, Boolean, Text
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
+from pydantic import BaseModel
+from pydantic.functional_validators import field_validator
 
-from schema import Base
+from schema import TableBase
 
 
-class User(Base):
+class User(TableBase):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -18,7 +20,7 @@ class User(Base):
     sessions = relationship("Session", back_populates="users")
 
 
-class Session(Base):
+class Session(TableBase):
     __tablename__ = "sessions"
 
     session_id = Column(String(255), primary_key=True)
@@ -33,3 +35,19 @@ class Session(Base):
     is_active = Column(Boolean, default=True, nullable=False)
 
     user = relationship("User", back_populates="sessions")
+
+
+class UserLoginRecord(BaseModel):
+    userID: str
+    password: str
+
+    @field_validator("password")
+    def password_required(cls, v):
+        if not v:
+            raise ValueError("Must not be empty string")
+        return v
+
+
+class UserRecord(BaseModel):
+    userID: int
+    userName: str

@@ -1,10 +1,10 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Text
 from sqlalchemy.orm import relationship
 
-from schema import Base
+from schema import TableBase
 
 
-class Group(Base):
+class Group(TableBase):
     __tablename__ = "groups"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -14,7 +14,7 @@ class Group(Base):
     routines = relationship("Routine", back_populates="group")
 
 
-class Contact(Base):
+class Contact(TableBase):
     __tablename__ = "contacts"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -31,7 +31,7 @@ class Contact(Base):
     calls = relationship("Call", back_populates="receivers")
 
 
-class Crop(Base):
+class Crop(TableBase):
     __tablename__ = "crops"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -40,7 +40,7 @@ class Crop(Base):
     contact_crops = relationship("ContactCrop", back_populates="crops")
 
 
-class Equipment(Base):
+class Equipment(TableBase):
     __tablename__ = "equipments"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -49,7 +49,7 @@ class Equipment(Base):
     contact_equipments = relationship("ContactEquipment", back_populates="equipments")
 
 
-class ContactCrop(Base):
+class ContactCrop(TableBase):
     __tablename__ = "contact_crops"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -60,7 +60,7 @@ class ContactCrop(Base):
     crop = relationship("Crop", back_populates="contact_crops")
 
 
-class ContactEquipment(Base):
+class ContactEquipment(TableBase):
     __tablename__ = "contact_equipments"
 
     id = Column(Integer, primary_key=True, autoincrement=True)

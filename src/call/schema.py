@@ -3,7 +3,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from typing_extensions import TypedDict
 
-from schema import Base
+from schema import TableBase
 
 """
 call_id	string	call unique id
@@ -145,7 +145,7 @@ class TalkRecord(TypedDict):
     step: str
 
 
-class Answer(Base):
+class Answer(TableBase):
     __tablename__ = "answers"
 
     id = Column(Integer, primary_key=True, autoincrement=True)

@@ -2,10 +2,10 @@ from sqlalchemy import Column, Integer, String, JSON, ForeignKey, TIMESTAMP
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
-from schema import Base
+from schema import TableBase
 
 
-class Question(Base):
+class Question(TableBase):
     __tablename__ = "questions"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -15,7 +15,7 @@ class Question(Base):
     calls = relationship("Call", back_populates="questions")
 
 
-class Survey(Base):
+class Survey(TableBase):
     __tablename__ = "surveys"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -27,7 +27,7 @@ class Survey(Base):
     answers = relationship("Answer", back_populates="surveys")
 
 
-class Answer(Base):
+class Answer(TableBase):
     __tablename__ = "answers"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
