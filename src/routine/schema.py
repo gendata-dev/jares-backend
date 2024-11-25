@@ -21,4 +21,4 @@ class Routine(Base):
     group = relationship("Group", back_populates="routines")
     survey = relationship("Survey", back_populates="routines")
     model = relationship("Model", back_populates="routines")
-    calls = relationship("Call", back_populates="routine")
+    calls = relationship("Call", back_populates="routines")

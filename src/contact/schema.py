@@ -25,10 +25,10 @@ class Contact(Base):
     call_time = Column(Text, nullable=True)
 
     group = relationship("Group", back_populates="contacts")
-    contact_crops = relationship("ContactCrop", back_populates="contact")
-    contact_equipments = relationship("ContactEquipment", back_populates="contact")
-    answers = relationship("Answer", back_populates="user")
-    calls = relationship("Call", back_populates="receiver")
+    contact_crops = relationship("ContactCrop", back_populates="contacts")
+    contact_equipments = relationship("ContactEquipment", back_populates="contacts")
+    answers = relationship("Answer", back_populates="users")
+    calls = relationship("Call", back_populates="receivers")
 
 
 class Crop(Base):
@@ -37,7 +37,7 @@ class Crop(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(20), nullable=False)
 
-    contact_crops = relationship("ContactCrop", back_populates="crop")
+    contact_crops = relationship("ContactCrop", back_populates="crops")
 
 
 class Equipment(Base):
@@ -46,7 +46,7 @@ class Equipment(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(20), nullable=False)
 
-    contact_equipments = relationship("ContactEquipment", back_populates="equipment")
+    contact_equipments = relationship("ContactEquipment", back_populates="equipments")
 
 
 class ContactCrop(Base):

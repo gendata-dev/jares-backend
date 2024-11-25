@@ -11,8 +11,8 @@ class Question(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     question_list = Column(JSON, nullable=False)
 
-    answers = relationship("Answer", back_populates="question")
-    calls = relationship("Call", back_populates="start_question")
+    answers = relationship("Answer", back_populates="questions")
+    calls = relationship("Call", back_populates="questions")
 
 
 class Survey(Base):
@@ -22,9 +22,9 @@ class Survey(Base):
     question_id = Column(Integer, nullable=False)
     survey_name = Column(String(50), nullable=False)
 
-    routines = relationship("Routine", back_populates="survey")
-    calls = relationship("Call", back_populates="survey")
-    answers = relationship("Answer", back_populates="survey")
+    routines = relationship("Routine", back_populates="surveys")
+    calls = relationship("Call", back_populates="surveys")
+    answers = relationship("Answer", back_populates="surveys")
 
 
 class Answer(Base):
