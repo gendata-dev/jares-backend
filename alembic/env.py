@@ -23,7 +23,7 @@ from src.contact.schema import (
 )
 from src.routine.schema import Routine
 from src.survey.schema import Question, Survey
-from src.schema import Base
+from src.schema import TableBase
 
 
 # this is the Alembic Config object, which provides
@@ -40,7 +40,7 @@ if config.config_file_name is not None:
 # from src.auth.schema import User, Session
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../src")))
 
-target_metadata = Base.metadata
+target_metadata = TableBase.metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
