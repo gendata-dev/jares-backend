@@ -1,5 +1,4 @@
 from pydantic import BaseModel
-from pydantic.generics import GenericModel
 from sqlalchemy.orm import declarative_base
 from typing import Generic, TypeVar, List, Optional
 
@@ -16,6 +15,6 @@ class MetaData(BaseModel):
     totalPages: Optional[int] = None
 
 
-class GenericResponse(GenericModel, Generic[T]):
-    data: Optional[MetaData]
+class GenericResponse(BaseModel, Generic[T]):
     items: List[T]
+    meta: Optional[MetaData] = None

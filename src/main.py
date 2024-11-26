@@ -1,7 +1,7 @@
 import os
 import logging
-from contextlib import asynccontextmanager
 from fastapi import FastAPI
+from contextlib import asynccontextmanager
 
 from src.call.router import router as call_router
 from src.auth.router import router as auth_router
@@ -15,11 +15,11 @@ from src.config import LogConfig
 app = FastAPI()
 
 """ 라우터 추가 """
+app.include_router(call_router, prefix="/v1", tags=["call"])
 app.include_router(auth_router, prefix="/user-management", tags=["auth"])
+app.include_router(survey_router, prefix="/survey-management", tags=["survey"])
 app.include_router(contact_router, prefix="/contact-management", tags=["contact"])
 app.include_router(routine_router, prefix="/routine-management", tags=["routine"])
-app.include_router(survey_router, prefix="/survey-management", tags=["survey"])
-app.include_router(call_router, prefix="/v1", tags=["call"])
 
 
 @asynccontextmanager

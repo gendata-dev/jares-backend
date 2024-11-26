@@ -8,8 +8,13 @@ router = APIRouter()
 """BASE_URL/user-management"""
 
 
+# @router.post("/token", response_model=GenericResponse[UserResponse])
 @router.post("/token")
-async def create_token():
+async def login_user(
+    user_in: UserLoginRequest,
+    db_session: DbSession,
+):
+    print(db_session.query(User))
     return {"token": "mock jwt", "role": "mock user"}
 
 

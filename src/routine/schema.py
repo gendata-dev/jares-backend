@@ -19,7 +19,7 @@ class Routine(TableBase):
     day_of_the_week = Column(String(20), nullable=False)
     start_time = Column(Integer, nullable=False)
 
-    group = relationship("Group", back_populates="routines")
-    survey = relationship("Survey", back_populates="routines")
-    model = relationship("Model", back_populates="routines")
-    calls = relationship("Call", back_populates="routines")
+    groups = relationship("Group", back_populates="routines")
+    surveys = relationship("Survey", back_populates="routines")
+    models = relationship("Model", back_populates="routines")
+    call_logs = relationship("CallLog", back_populates="routines")

@@ -1,42 +1,42 @@
-from sqlalchemy import Column, Integer, String, JSON, ForeignKey, TIMESTAMP
+from sqlalchemy import Column, Integer, String, JSON, TIMESTAMP, Text
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
-from schema import TableBase
+from src.schema import TableBase
 
 
 class Question(TableBase):
-    __tablename__ = "questions"
+	__tablename__ = "questions"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    question_list = Column(JSON, nullable=False)
+	id = Column(Integer, primary_key=True, autoincrement=True)
+	question_list = Column(JSON, nullable=False)
 
-    answers = relationship("Answer", back_populates="questions")
-    calls = relationship("Call", back_populates="questions")
+	answers = relationship("Answer", back_populates="questions")
+    # calls = relationship("Call", back_populates="questions")
 
 
 class Survey(TableBase):
-    __tablename__ = "surveys"
+	__tablename__ = "surveys"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    question_id = Column(Integer, nullable=False)
-    survey_name = Column(String(50), nullable=False)
+	id = Column(Integer, primary_key=True, autoincrement=True)
+	question_id = Column(Integer, nullable=False)
+	survey_name = Column(String(50), nullable=False)
+    
+	routines = relationship("Routine", back_populates="surveys")
+	answers = relationship("Answer", back_populates="surveys")
 
-    routines = relationship("Routine", back_populates="surveys")
-    calls = relationship("Call", back_populates="surveys")
-    answers = relationship("Answer", back_populates="surveys")
 
+class Model(TableBase):
+	__tablename__ = "models"
+    
+	id = Column(Integer, primary_key=True, autoincrement=True)
+	model_name = Column(String(50), nullable=False)
+	reference_file = Column(Text, nullable=True)
+	main_goals = Column(Text, nullable=True)
+	prompt_1 = Column(Text, nullable=True)
+	prompt_2 = Column(Text, nullable=True)
+	prompt_3 = Column(Text, nullable=True)
+	created_at = Column(TIMESTAMP(timezone=True), server_default=func.now(), nullable=False)
+	updated_at = Column(TIMESTAMP(timezone=True), onupdate=func.now(), nullable=True)
 
-class Answer(TableBase):
-    __tablename__ = "answers"
-
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    question_id = Column(Integer, ForeignKey("questions.id"), nullable=False)
-    user_id = Column(Integer, ForeignKey("contacts.id"), nullable=False)
-    survey_id = Column(Integer, ForeignKey("surveys.id"), nullable=False)
-    answer_list = Column(JSON, nullable=False)
-    created_at = Column(TIMESTAMP(timezone=True), server_default=func.now())
-
-    user = relationship("Contact", back_populates="answers")
-    survey = relationship("Survey", back_populates="answers")
-    question = relationship("Question", back_populates="answers")
+	routines = relationship("Routine", back_populates="models")
