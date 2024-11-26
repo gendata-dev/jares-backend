@@ -3,7 +3,9 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from typing_extensions import TypedDict
 
-from schema import TableBase
+from src.contact.schema import Contact, Group
+from src.survey.schema import Question
+from src.schema import TableBase
 
 """
 call_id	string	call unique id

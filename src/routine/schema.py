@@ -1,7 +1,8 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Date
 from sqlalchemy.orm import relationship
 
-from schema import TableBase
+from src.schema import TableBase
+from src.survey.schema import Survey
 
 
 class Routine(TableBase):

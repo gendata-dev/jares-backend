@@ -3,7 +3,7 @@ from fastapi import Depends
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 
-from config import DBConfig
+from src.config import DBConfig
 
 DB_URL = DBConfig.SQLALCHEMY_DATABASE_URI
 

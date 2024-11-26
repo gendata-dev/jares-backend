@@ -1,7 +1,8 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Text
 from sqlalchemy.orm import relationship
 
-from schema import TableBase
+from src.schema import TableBase
+from src.routine.schema import Routine
 
 
 class Group(TableBase):

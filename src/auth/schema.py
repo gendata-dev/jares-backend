@@ -4,7 +4,7 @@ from sqlalchemy.sql import func
 from pydantic import BaseModel
 from pydantic.functional_validators import field_validator
 
-from schema import TableBase
+from src.schema import TableBase
 
 
 class User(TableBase):

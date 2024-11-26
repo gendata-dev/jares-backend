@@ -3,13 +3,13 @@ import logging
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
-from auth.router import router as auth_router
-from call.router import router as call_router
-from contact.router import router as contact_router
-from routine.router import router as routine_router
-from survey.router import router as survey_router
+from src.call.router import router as call_router
+from src.auth.router import router as auth_router
+from src.survey.router import router as survey_router
+from src.contact.router import router as contact_router
+from src.routine.router import router as routine_router
 
-from config import LogConfig
+from src.config import LogConfig
 
 
 app = FastAPI()

@@ -4,8 +4,8 @@ import logging
 from fastapi import HTTPException
 from fastapi.responses import JSONResponse
 
-from config import LogConfig
-from call.schema import CallDetailRecord, AnswerRecord, TalkRecord
+from src.config import LogConfig
+from src.call.schema import CallDetailRecord, AnswerRecord, TalkRecord
 
 
 """

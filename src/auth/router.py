@@ -1,5 +1,9 @@
 from fastapi import APIRouter, status
 
+from src.database import DbSession
+from src.auth.schema import UserLoginRequest, UserResponse, User, Session
+from src.schema import GenericResponse
+
 router = APIRouter()
 """BASE_URL/user-management"""
 
