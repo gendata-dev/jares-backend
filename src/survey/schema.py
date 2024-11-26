@@ -12,7 +12,7 @@ class Question(TableBase):
 	question_list = Column(JSON, nullable=False)
 
 	answers = relationship("Answer", back_populates="questions")
-    # calls = relationship("Call", back_populates="questions")
+	# calls = relationship("Call", back_populates="questions")
 
 
 class Survey(TableBase):
@@ -21,14 +21,14 @@ class Survey(TableBase):
 	id = Column(Integer, primary_key=True, autoincrement=True)
 	question_id = Column(Integer, nullable=False)
 	survey_name = Column(String(50), nullable=False)
-    
+	
 	routines = relationship("Routine", back_populates="surveys")
 	answers = relationship("Answer", back_populates="surveys")
 
 
 class Model(TableBase):
 	__tablename__ = "models"
-    
+	
 	id = Column(Integer, primary_key=True, autoincrement=True)
 	model_name = Column(String(50), nullable=False)
 	reference_file = Column(Text, nullable=True)

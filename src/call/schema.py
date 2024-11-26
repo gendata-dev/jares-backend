@@ -6,8 +6,8 @@ from typing_extensions import TypedDict
 from uuid import uuid4
 from enum import Enum as PyEnum
 
-from src.contact.schema import Contact, Group
-from src.survey.schema import Question
+from src.contact.schema import Contact, Group  # noqa
+from src.survey.schema import Question  # noqa
 from src.schema import TableBase
 
 """
@@ -194,8 +194,12 @@ class CallLog(TableBase):
 	duration = Column(Integer, default=0)
 	cause = Column(String(10), nullable=True)
 	attempt_count = Column(Integer, default=0)
-	status = Column(ENUM(CallStatus, name="call_status", create_type=True), nullable=True)
-	failure_reason = Column(ENUM(FailureReason, name="failure_reason", create_type=True), nullable=True)
+	status = Column(
+		ENUM(CallStatus, name="call_status", create_type=True), nullable=True
+	)
+	failure_reason = Column(
+		ENUM(FailureReason, name="failure_reason", create_type=True), nullable=True
+	)
 
 	contacts = relationship("Contact", back_populates="call_logs")
 	routines = relationship("Routine", back_populates="call_logs")

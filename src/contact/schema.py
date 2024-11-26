@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String, ForeignKey, Text
 from sqlalchemy.orm import relationship
 
 from src.schema import TableBase
-from src.routine.schema import Routine
+from src.routine.schema import Routine  # noqa
 
 
 class Group(TableBase):

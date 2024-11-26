@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Date
 from sqlalchemy.orm import relationship
 
 from src.schema import TableBase
-from src.survey.schema import Survey
+from src.survey.schema import Survey  # noqa
 
 
 class Routine(TableBase):
