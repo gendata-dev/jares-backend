@@ -11,7 +11,7 @@ class Routine(TableBase):
     id = Column(Integer, primary_key=True, autoincrement=True)
     group_id = Column(Integer, ForeignKey("groups.id"), nullable=False)
     survey_id = Column(Integer, ForeignKey("surveys.id"), nullable=False)
-    model_id = Column(Integer, ForeignKey("models.id"), nullable=False)
+    model_id = Column(Integer, ForeignKey("llms.id"), nullable=False)
     routine_name = Column(String(50), nullable=False)
     start_date = Column(Date, nullable=False)
     end_date = Column(Date, nullable=False)
@@ -21,5 +21,5 @@ class Routine(TableBase):
 
     groups = relationship("Group", back_populates="routines")
     surveys = relationship("Survey", back_populates="routines")
-    models = relationship("Model", back_populates="routines")
+    llms = relationship("Llm", back_populates="routines")
     call_logs = relationship("CallLog", back_populates="routines")

@@ -23,7 +23,7 @@ from src.contact.schema import (
     ContactEquipment,
 )
 from src.routine.schema import Routine
-from src.survey.schema import Question, Survey, Model
+from src.survey.schema import Question, Survey, Llm
 
 
 # this is the Alembic Config object, which provides
