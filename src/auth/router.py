@@ -13,8 +13,7 @@ async def login_user(
     user_in: UserLoginRequest,
     db_session: DbSession,
 ):
-
-    items = [UserResponse(userID=1, username= "kimwooseok")]
+    items = [UserResponse(userID=1, username="kimwooseok")]
     return GenericResponse.create(items=items)
 
 
