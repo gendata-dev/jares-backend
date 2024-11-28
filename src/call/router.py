@@ -1,12 +1,12 @@
 from fastapi import APIRouter, Depends
 
-from call.service import (
+from src.call.service import (
     CallStartService,
     AnswerHandleService,
     QuestionPrepareService,
     CallEndService,
 )
-from call.schema import CallDetailRecord, AnswerRecord, TalkRecord
+from src.call.schema import CallDetailRecord, AnswerRecord, TalkRecord
 
 router = APIRouter()
 """ BASE_URL/v1 """

@@ -1,71 +1,72 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Text
 from sqlalchemy.orm import relationship
 
-from schema import Base
+from src.schema import TableBase
+from src.routine.schema import Routine  # noqa
 
 
-class Group(Base):
-    __tablename__ = "groups"
+class Group(TableBase):
+	__tablename__ = "groups"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    group_name = Column(String(50), nullable=False)
+	id = Column(Integer, primary_key=True, autoincrement=True)
+	group_name = Column(String(50), nullable=False)
 
-    contacts = relationship("Contact", back_populates="group")
-    routines = relationship("Routine", back_populates="group")
-
-
-class Contact(Base):
-    __tablename__ = "contacts"
-
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    group_id = Column(Integer, ForeignKey("groups.id"), nullable=False)
-    name = Column(String(10), nullable=False)
-    phone = Column(String(20), nullable=False)
-    region = Column(String(50), nullable=False)
-    call_time = Column(Text, nullable=True)
-
-    group = relationship("Group", back_populates="contacts")
-    contact_crops = relationship("ContactCrop", back_populates="contact")
-    contact_equipments = relationship("ContactEquipment", back_populates="contact")
-    answers = relationship("Answer", back_populates="user")
-    calls = relationship("Call", back_populates="receiver")
+	contacts = relationship("Contact", back_populates="groups")
+	routines = relationship("Routine", back_populates="groups")
 
 
-class Crop(Base):
-    __tablename__ = "crops"
+class Contact(TableBase):
+	__tablename__ = "contacts"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(20), nullable=False)
+	id = Column(Integer, primary_key=True, autoincrement=True)
+	group_id = Column(Integer, ForeignKey("groups.id"), nullable=False)
+	name = Column(String(10), nullable=False)
+	phone = Column(String(20), nullable=False)
+	region = Column(String(50), nullable=False)
+	call_time = Column(Text, nullable=True)
 
-    contact_crops = relationship("ContactCrop", back_populates="crop")
-
-
-class Equipment(Base):
-    __tablename__ = "equipments"
-
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(20), nullable=False)
-
-    contact_equipments = relationship("ContactEquipment", back_populates="equipment")
-
-
-class ContactCrop(Base):
-    __tablename__ = "contact_crops"
-
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    contact_id = Column(Integer, ForeignKey("contacts.id"), nullable=False)
-    crop_id = Column(Integer, ForeignKey("crops.id"), nullable=False)
-
-    contact = relationship("Contact", back_populates="contact_crops")
-    crop = relationship("Crop", back_populates="contact_crops")
+	groups = relationship("Group", back_populates="contacts")
+	contact_crops = relationship("ContactCrop", back_populates="contacts")
+	contact_equipments = relationship("ContactEquipment", back_populates="contacts")
+	call_logs = relationship("CallLog", back_populates="contacts")
+	answers = relationship("Answer", back_populates="contacts")
 
 
-class ContactEquipment(Base):
-    __tablename__ = "contact_equipments"
+class Crop(TableBase):
+	__tablename__ = "crops"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    contact_id = Column(Integer, ForeignKey("contacts.id"), nullable=False)
-    equipment_id = Column(Integer, ForeignKey("equipments.id"), nullable=False)
+	id = Column(Integer, primary_key=True, autoincrement=True)
+	name = Column(String(50), nullable=False)
 
-    contact = relationship("Contact", back_populates="contact_equipments")
-    equipment = relationship("Equipment", back_populates="contact_equipments")
+	contact_crops = relationship("ContactCrop", back_populates="crops")
+
+
+class Equipment(TableBase):
+	__tablename__ = "equipments"
+
+	id = Column(Integer, primary_key=True, autoincrement=True)
+	name = Column(String(50), nullable=False)
+
+	contact_equipments = relationship("ContactEquipment", back_populates="equipments")
+
+
+class ContactCrop(TableBase):
+	__tablename__ = "contact_crops"
+
+	id = Column(Integer, primary_key=True, autoincrement=True)
+	contact_id = Column(Integer, ForeignKey("contacts.id"), nullable=False)
+	crop_id = Column(Integer, ForeignKey("crops.id"), nullable=False)
+
+	contacts = relationship("Contact", back_populates="contact_crops")
+	crops = relationship("Crop", back_populates="contact_crops")
+
+
+class ContactEquipment(TableBase):
+	__tablename__ = "contact_equipments"
+
+	id = Column(Integer, primary_key=True, autoincrement=True)
+	contact_id = Column(Integer, ForeignKey("contacts.id"), nullable=False)
+	equipment_id = Column(Integer, ForeignKey("equipments.id"), nullable=False)
+
+	contacts = relationship("Contact", back_populates="contact_equipments")
+	equipments = relationship("Equipment", back_populates="contact_equipments")

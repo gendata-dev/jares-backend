@@ -1,25 +1,48 @@
-from sqlalchemy import Column, Integer, String, JSON
+from sqlalchemy import Column, Integer, String, JSON, TIMESTAMP, Text, ForeignKey
 from sqlalchemy.orm import relationship
-from schema import Base
+from sqlalchemy.sql import func
+
+from src.schema import TableBase
 
 
-class Question(Base):
+class Question(TableBase):
     __tablename__ = "questions"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
+    survey_id = Column(Integer, ForeignKey("surveys.id"), nullable=False)
     question_list = Column(JSON, nullable=False)
+    created_at = Column(
+        TIMESTAMP(timezone=True), server_default=func.now(), nullable=False
+    )
 
-    answers = relationship("Answer", back_populates="question")
-    calls = relationship("Call", back_populates="start_question")
+    answers = relationship("Answer", back_populates="questions")
+    surveys = relationship("Survey", back_populates="questions")
 
 
-class Survey(Base):
+class Survey(TableBase):
     __tablename__ = "surveys"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    question_id = Column(Integer, nullable=False)
+    question_id = Column(Integer, ForeignKey("questions.id"), nullable=False)
     survey_name = Column(String(50), nullable=False)
 
-    routines = relationship("Routine", back_populates="survey")
-    calls = relationship("Call", back_populates="survey")
-    answers = relationship("Answer", back_populates="survey")
+    routines = relationship("Routine", back_populates="surveys")
+    questions = relationship("Question", back_populates="surveys")
+
+
+class Llm(TableBase):
+    __tablename__ = "llms"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    model_name = Column(String(50), nullable=False)
+    reference_file = Column(Text, nullable=True)
+    main_goals = Column(Text, nullable=True)
+    prompt_1 = Column(Text, nullable=True)
+    prompt_2 = Column(Text, nullable=True)
+    prompt_3 = Column(Text, nullable=True)
+    created_at = Column(
+        TIMESTAMP(timezone=True), server_default=func.now(), nullable=False
+    )
+    updated_at = Column(TIMESTAMP(timezone=True), onupdate=func.now(), nullable=True)
+
+    routines = relationship("Routine", back_populates="llms")

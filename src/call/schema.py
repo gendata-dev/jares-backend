@@ -1,9 +1,14 @@
-from sqlalchemy import Column, Integer, ForeignKey, JSON, TIMESTAMP
+from sqlalchemy import Column, Integer, ForeignKey, JSON, TIMESTAMP, String
+from sqlalchemy.dialects.postgresql import ENUM
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from typing_extensions import TypedDict
+from uuid import uuid4
+from enum import Enum as PyEnum
 
-from schema import Base
+from src.contact.schema import Contact, Group  # noqa
+from src.survey.schema import Question  # noqa
+from src.schema import TableBase
 
 """
 call_id	string	call unique id
@@ -22,16 +27,16 @@ cause	string	통화종료 코드
 
 # TODO: use datetime type?
 class CallDetailRecord(TypedDict):
-    call_id: str
-    t_id: str
-    caller: str
-    callee: str
-    start_time: str  # datetime
-    answer_time: str  # datetime
-    end_time: str  # datetime
-    duration: int
-    dial_duration: int
-    hangup_disposition: str
+	call_id: str
+	t_id: str
+	caller: str
+	callee: str
+	start_time: str  # datetime
+	answer_time: str  # datetime
+	end_time: str  # datetime
+	duration: int
+	dial_duration: int
+	hangup_disposition: str
 
 
 """
@@ -45,12 +50,12 @@ answer_time	string	전화 받은 시간		                             2023-01-01
 
 
 class AnswerRecord(TypedDict):
-    call_id: str
-    t_id: str
-    caller: str
-    callee: str
-    direction: str
-    answer_time: str  # datetime
+	call_id: str
+	t_id: str
+	caller: str
+	callee: str
+	direction: str
+	answer_time: str  # datetime
 
 
 """
@@ -135,26 +140,64 @@ stt_detail	string	stt 결과 상세		"[
 
 
 class TalkRecord(TypedDict):
-    call_id: str
-    t_id: str
-    play_status: str  # done or break
-    stt: str
-    stt_detail: str
-    dtmf: str
-    dtmf_status: str
-    step: str
+	call_id: str
+	t_id: str
+	play_status: str
+	stt: str
+	stt_detail: str
+	dtmf: str
+	dtmf_status: str
+	step: str
 
 
-class Answer(Base):
-    __tablename__ = "answers"
+class CallStatus(PyEnum):
+	SUCCESS = "success"
+	PENDING = "pending"
+	INTERRUPTED = "interrupted"
+	FAILED = "failed"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    question_id = Column(Integer, ForeignKey("questions.id"), nullable=False)
-    user_id = Column(Integer, ForeignKey("contacts.id"), nullable=False)
-    survey_id = Column(Integer, ForeignKey("surveys.id"), nullable=False)
-    answer_list = Column(JSON, nullable=False)
-    created_at = Column(TIMESTAMP(timezone=True), server_default=func.now())
 
-    user = relationship("Contact", back_populates="answers")
-    survey = relationship("Survey", back_populates="answers")
-    question = relationship("Question", back_populates="answers")
+class FailureReason(PyEnum):
+	ERROR = "error"
+	NO_ANSWER = "no_answer"
+	DELAYED = "delayed"
+	NOT_AVAILABLE = "not_available"
+	CALL_TERMINATED = "call_terminated"
+
+
+class Answer(TableBase):
+	__tablename__ = "answers"
+
+	id = Column(Integer, primary_key=True, autoincrement=True)
+	question_id = Column(Integer, ForeignKey("questions.id"), nullable=False)
+	contact_id = Column(Integer, ForeignKey("contacts.id"), nullable=False)
+	answer_list = Column(JSON, nullable=False)
+	created_at = Column(TIMESTAMP(timezone=True), server_default=func.now(), nullable=False)
+
+	contacts = relationship("Contact", back_populates="answers")
+	questions = relationship("Question", back_populates="answers")
+
+
+class CallLog(TableBase):
+	__tablename__ = "call_logs"
+
+	# TODO: API명세와 검증 필요함
+	id = Column(String(40), primary_key=True, default=uuid4)
+	contact_id = Column(Integer, ForeignKey("contacts.id"), nullable=False)
+	routine_id = Column(Integer, ForeignKey("routines.id"), nullable=False)
+	answer_time = Column(TIMESTAMP(timezone=True), nullable=True)
+	start_time = Column(TIMESTAMP(timezone=True), nullable=False)
+	end_time = Column(TIMESTAMP(timezone=True), nullable=False)
+	hangup_disposition = Column(String(10), nullable=True)
+	duration = Column(Integer, default=0)
+	cause = Column(String(10), nullable=True)
+	attempt_count = Column(Integer, default=0)
+	status = Column(
+		ENUM(CallStatus, name="call_status", create_type=True), nullable=True
+	)
+	failure_reason = Column(
+		ENUM(FailureReason, name="failure_reason", create_type=True), nullable=True
+	)
+
+	contacts = relationship("Contact", back_populates="call_logs")
+	routines = relationship("Routine", back_populates="call_logs")

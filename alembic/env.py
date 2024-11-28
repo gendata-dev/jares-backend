@@ -2,16 +2,17 @@
 
 import sys
 import os
-
 from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
-
 from alembic import context
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../src")))
+
+from src.schema import TableBase
 from src.config import DBConfig
-from src.call.schema import Answer
+from src.call.schema import Answer, CallLog
 from src.auth.schema import User
 from src.contact.schema import (
     Group,
@@ -22,8 +23,7 @@ from src.contact.schema import (
     ContactEquipment,
 )
 from src.routine.schema import Routine
-from src.survey.schema import Question, Survey
-from src.schema import Base
+from src.survey.schema import Question, Survey, Llm
 
 
 # this is the Alembic Config object, which provides
@@ -38,9 +38,9 @@ if config.config_file_name is not None:
 # add your model's MetaData object here
 # for 'autogenerate' support
 # from src.auth.schema import User, Session
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../src")))
 
-target_metadata = Base.metadata
+
+target_metadata = TableBase.metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
