@@ -50,3 +50,4 @@ class UserLoginRequest(BaseModel):
 
 class UserResponse(BaseModel):
     userID: int
+    username: str

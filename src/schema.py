@@ -5,7 +5,7 @@ from typing import Generic, TypeVar, List, Optional
 TableBase = declarative_base()
 
 
-T = TypeVar("T")
+T = TypeVar("T", bound=BaseModel)
 
 
 class MetaData(BaseModel):
@@ -18,3 +18,7 @@ class MetaData(BaseModel):
 class GenericResponse(BaseModel, Generic[T]):
     items: List[T]
     meta: Optional[MetaData] = None
+
+    @classmethod
+    def create(cls, items: List[T], meta: Optional[MetaData] = None):
+        return cls(items=items, meta=meta)
