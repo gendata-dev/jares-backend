@@ -171,12 +171,10 @@ class Answer(TableBase):
 	id = Column(Integer, primary_key=True, autoincrement=True)
 	question_id = Column(Integer, ForeignKey("questions.id"), nullable=False)
 	contact_id = Column(Integer, ForeignKey("contacts.id"), nullable=False)
-	survey_id = Column(Integer, ForeignKey("surveys.id"), nullable=False)
 	answer_list = Column(JSON, nullable=False)
-	created_at = Column(TIMESTAMP(timezone=True), server_default=func.now())
+	created_at = Column(TIMESTAMP(timezone=True), server_default=func.now(), nullable=False)
 
 	contacts = relationship("Contact", back_populates="answers")
-	surveys = relationship("Survey", back_populates="answers")
 	questions = relationship("Question", back_populates="answers")
 
 

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, JSON, TIMESTAMP, Text
+from sqlalchemy import Column, Integer, String, JSON, TIMESTAMP, Text, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
@@ -9,21 +9,23 @@ class Question(TableBase):
 	__tablename__ = "questions"
 
 	id = Column(Integer, primary_key=True, autoincrement=True)
+	survey_id = Column(Integer, ForeignKey("surveys.id"), nullable=False)
 	question_list = Column(JSON, nullable=False)
+	created_at = Column(TIMESTAMP(timezone=True), server_default=func.now(), nullable=False)
 
 	answers = relationship("Answer", back_populates="questions")
-	# calls = relationship("Call", back_populates="questions")
+	surveys = relationship("Survey", back_populates="questions")
 
 
 class Survey(TableBase):
 	__tablename__ = "surveys"
 
 	id = Column(Integer, primary_key=True, autoincrement=True)
-	question_id = Column(Integer, nullable=False)
+	question_id = Column(Integer, ForeignKey("questions.id"), nullable=False)
 	survey_name = Column(String(50), nullable=False)
 	
 	routines = relationship("Routine", back_populates="surveys")
-	answers = relationship("Answer", back_populates="surveys")
+	questions = relationship("Question", back_populates="surveys")
 
 
 class Model(TableBase):
