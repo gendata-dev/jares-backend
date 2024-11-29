@@ -36,7 +36,7 @@ class DBConfig:
     USER = config("DATABASE_USER", default="postgres")
     PASSWORD = config("DATABASE_PASSWORD", default="123")
     SQLALCHEMY_DATABASE_URI = (
-        f"postgresql+psycopg2://{USER}:{PASSWORD}@{HOSTNAME}:{PORT}/{NAME}?options=-c%%20timezone=Asia/Seoul"
+        f"postgresql+psycopg2://{USER}:{PASSWORD}@{HOSTNAME}:{PORT}/{NAME}"
     )
     ENGINE_POOL_SIZE = config("DATABASE_ENGINE_POOL_SIZE", cast=int, default=20)
     ENGINE_MAX_OVERFLOW = config("DATABASE_ENGINE_MAX_OVERFLOW", cast=int, default=0)

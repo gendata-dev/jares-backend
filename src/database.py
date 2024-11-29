@@ -1,24 +1,32 @@
-from typing import Annotated
+from typing import Annotated, Optional
 from fastapi import Depends
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
+from sqlalchemy.engine import Engine
 
 from src.config import DBConfig
 
 DB_URL = DBConfig.SQLALCHEMY_DATABASE_URI
 
-# TODO: it's for test need to delete in prod
-# import logging
-# logging.basicConfig()
-# logging.getLogger("sqlalchemy.engine").setLevel(logging.INFO)
-engine = create_engine(DB_URL, echo=True)
 
-# engine = create_engine(DB_URL)
+db_conn: Optional[Engine]
 
+def connect_db():
+    global db_conn
+    # TODO: echo for test need to delete in prod
+    db_conn = create_engine(DB_URL, echo=True)
+
+def disconnect_db():
+    global db_conn
+    if db_conn:
+        db_conn.dispose()
 
 def get_db():
-    with Session(engine) as session:
-        yield session
+    with Session(bind=db_conn) as session:
+        try:
+            yield session
+        finally:
+            session.close()
 
 
 DbSession = Annotated[Session, Depends(get_db)]
