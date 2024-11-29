@@ -1,8 +1,9 @@
 from pydantic import BaseModel
-from sqlalchemy.orm import declarative_base
+from sqlalchemy.orm import DeclarativeBase
 from typing import Generic, TypeVar, List, Optional
 
-TableBase = declarative_base()
+class TableBase(DeclarativeBase):
+    pass
 
 
 T = TypeVar("T", bound=BaseModel)
