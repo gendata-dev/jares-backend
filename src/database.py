@@ -6,13 +6,13 @@ from sqlalchemy.engine import Engine
 
 from src.config import DBConfig
 
-DB_URL = DBConfig.SQLALCHEMY_DATABASE_URI
-
 
 db_conn: Optional[Engine]
 
 
 def connect_db():
+    DB_URL = DBConfig.SQLALCHEMY_DATABASE_URI
+
     global db_conn
     # TODO: echo for test need to delete in prod
     db_conn = create_engine(DB_URL, echo=True)
