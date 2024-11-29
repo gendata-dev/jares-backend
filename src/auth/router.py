@@ -4,6 +4,7 @@ from src.database import DbSession
 from src.schema import GenericResponse
 from src.auth.schema import UserLoginRequest, UserResponse
 
+
 router = APIRouter()
 """BASE_URL/user-management"""
 

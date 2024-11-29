@@ -1,5 +1,5 @@
-from typing import Annotated, Optional
 from fastapi import Depends
+from typing import Annotated, Optional
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 from sqlalchemy.engine import Engine
@@ -9,12 +9,10 @@ from src.config import DBConfig
 
 db_conn: Optional[Engine]
 
-
+# TODO: echo for test need to delete in prod
 def connect_db():
     DB_URL = DBConfig.SQLALCHEMY_DATABASE_URI
-
     global db_conn
-    # TODO: echo for test need to delete in prod
     db_conn = create_engine(DB_URL, echo=True)
 
 

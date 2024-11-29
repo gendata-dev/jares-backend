@@ -23,6 +23,7 @@ class Question(TableBase):
     )
 
 
+
 class Survey(TableBase):
     __tablename__ = "surveys"
 
@@ -41,6 +42,7 @@ class Survey(TableBase):
         uselist=False,
         primaryjoin="Survey.current_question_id == Question.id",
     )
+
 
 
 class Llm(TableBase):
