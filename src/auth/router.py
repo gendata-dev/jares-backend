@@ -17,6 +17,7 @@ async def login_user(
     return GenericResponse.create(items=items)
 
 
-@router.delete("/token", status_code=status.HTTP_201_CREATED)
+@router.delete("/token", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_token():
-    return {"message": "Logged out successfully"}
+    """유저 로그아웃"""
+    return
