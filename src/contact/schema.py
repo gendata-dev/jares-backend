@@ -76,3 +76,15 @@ class ContactEquipment(TableBase):
 	__table_args__ = tuple(PrimaryKeyConstraint(contact_id, equipment_id))
 
 
+class ContactGroup(TableBase):
+	"""관계 테이블"""
+	__tablename__ = "contact_groups"
+
+	contact_id = Column(Integer, ForeignKey("contacts.id"), nullable=False)
+	crop_id = Column(Integer, ForeignKey("crops.id"), nullable=False)
+
+	contacts = relationship("Contact", back_populates="contact_crops")
+	crops = relationship("Crop", back_populates="contact_crops")
+
+	__table_args__ = tuple(PrimaryKeyConstraint(contact_id, crop_id))
+
