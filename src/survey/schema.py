@@ -16,18 +16,33 @@ class Question(TableBase):
     )
 
     answers = relationship("Answer", back_populates="questions")
-    surveys = relationship("Survey", back_populates="questions")
+    surveys = relationship(
+        "Survey",
+        back_populates="questions",
+        primaryjoin="Question.survey_id == Survey.id",
+    )
+
 
 
 class Survey(TableBase):
     __tablename__ = "surveys"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    question_id = Column(Integer, ForeignKey("questions.id"), nullable=False)
+    current_question_id = Column(Integer, ForeignKey("questions.id"), nullable=False)
     survey_name = Column(String(50), nullable=False)
 
     routines = relationship("Routine", back_populates="surveys")
-    questions = relationship("Question", back_populates="surveys")
+    questions = relationship(
+        "Question",
+        back_populates="surveys",
+        primaryjoin="Question.survey_id == Survey.id",
+    )
+    current_questions = relationship(
+        "Question",
+        uselist=False,
+        primaryjoin="Survey.current_question_id == Question.id",
+    )
+
 
 
 class Llm(TableBase):

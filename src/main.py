@@ -10,6 +10,8 @@ from src.contact.router import router as contact_router
 from src.routine.router import router as routine_router
 
 from src.config import LogConfig
+from src.database import connect_db, disconnect_db
+
 
 
 app = FastAPI()
@@ -25,7 +27,9 @@ app.include_router(routine_router, prefix="/routine-management", tags=["routine"
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     setup_log_environment()
+    connect_db()
     yield
+    disconnect_db()
 
 
 def setup_log_environment():
