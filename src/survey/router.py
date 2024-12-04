@@ -49,13 +49,13 @@ async def create_questions(survey_id: int, db_session: DbSession):
     return GenericResponse.create(items=[])
 
 
-@router.put("/surveys/{survey_id}/questions", response_model=GenericResponse[list])
+@router.delete("/surveys/{survey_id}/questions", response_model=GenericResponse[list])
 async def delete_questions(survey_id: int, db_session: DbSession):
     """질문 삭제"""
     return GenericResponse.create(items=[])
 
 
-@router.delete("/surveys/{survey_id}/questions", response_model=GenericResponse[list])
+@router.put("/surveys/{survey_id}/questions", response_model=GenericResponse[list])
 async def update_questions(survey_id: int, db_session: DbSession):
     """질문 수정"""
     return GenericResponse.create(items=[])
