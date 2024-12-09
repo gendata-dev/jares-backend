@@ -6,7 +6,8 @@ from typing_extensions import TypedDict
 from uuid import uuid4
 from enum import Enum as PyEnum
 
-from src.contact.schema import Contact, Group  # noqa
+from src.contact.schema import Contact  # noqa
+from src.group.schema import Group  # noqa
 from src.survey.schema import Question  # noqa
 from src.schema import TableBase
 

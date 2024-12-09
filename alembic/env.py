@@ -14,8 +14,8 @@ from src.schema import TableBase
 from src.config import DBConfig
 from src.call.schema import Answer, CallLog
 from src.auth.schema import User
+from src.group.schema import Group
 from src.contact.schema import (
-    Group,
     Contact,
     Crop,
     Equipment,
