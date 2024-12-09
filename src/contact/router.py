@@ -16,22 +16,24 @@ async def get_contacts(db_session: DbSession):
     return GenericResponse.create(items=[])
 
 
-@router.post("/contacts", response_model=GenericResponse[list])
-async def create_contacts(db_session: DbSession):
-    """연락처 리스트 생성"""
-    return GenericResponse.create(items=[])
-
-
 @router.delete("/contacts", response_model=GenericResponse[list])
 async def delete_contacts(db_session: DbSession):
     """연락처 리스트 삭제"""
     return GenericResponse.create(items=[])
 
 
+@router.post("/contacts", response_model=GenericResponse[list])
+async def create_contacts(db_session: DbSession, contact_in: ContactCreate):
+    """연락처 생성"""
+    items = create_contact(db_session=db_session, contact_in=contact_in)
+    return GenericResponse.create(items=[items])
+
+
 @router.get("/contacts/{contact_id}", response_model=GenericResponse[list])
-async def get_contact(contact_id: int, db_session: DbSession):
+async def get_contact(contact_id: PrimaryKey, db_session: DbSession):
     """연락처 조회"""
-    return GenericResponse.create(items=[])
+    items = get_contact(db_session=db_session, contact_id=contact_id)
+    return GenericResponse.create(items=[items])
 
 
 @router.put("/contacts/{contact_id}", response_model=GenericResponse[list])
@@ -43,40 +45,4 @@ async def update_contact(contact_id: int, db_session: DbSession):
 @router.post("/contacts/import", response_model=GenericResponse[list])
 async def batch_create_contacts(db_session: DbSession):
     """연락처 파일 업로드 및 저장"""
-    return GenericResponse.create(items=[])
-
-
-@router.get("/groups", response_model=GenericResponse[list])
-async def get_groups(db_session: DbSession):
-    """그룹 리스트 조회"""
-    return GenericResponse.create(items=[])
-
-
-@router.post("/groups", response_model=GenericResponse[list])
-async def create_groups(db_session: DbSession):
-    """그룹 리스트 생성"""
-    return GenericResponse.create(items=[])
-
-
-@router.delete("/groups", response_model=GenericResponse[list])
-async def delete_groups(db_session: DbSession):
-    """그룹 리스트 삭제"""
-    return GenericResponse.create(items=[])
-
-
-@router.get("/groups/{group_id}", response_model=GenericResponse[list])
-async def get_group(group_id: int, db_session: DbSession):
-    """그룹 조회"""
-    return GenericResponse.create(items=[])
-
-
-@router.put("/groups/{group_id}", response_model=GenericResponse[list])
-async def update_group(group_id: int, db_session: DbSession):
-    """그룹 수정"""
-    return GenericResponse.create(items=[])
-
-
-@router.post("/contact-group-realations", response_model=GenericResponse[list])
-async def update_group_relation(group_id: int, db_session: DbSession):
-    """그룹 리스트에 연락처 리스트 추가"""
     return GenericResponse.create(items=[])
