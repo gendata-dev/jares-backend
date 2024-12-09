@@ -21,7 +21,7 @@ async def create_contacts(db_session: DbSession):
 
 @router.delete("/contacts", response_model=GenericResponse[list])
 async def delete_contacts(db_session: DbSession):
-    """연락처 리스트 삭제"""
+    """연락처 리스트 삭제a"""
     return GenericResponse.create(items=[])
 
 
