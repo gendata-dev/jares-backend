@@ -4,6 +4,9 @@ from starlette.config import Config
 config = Config(".env")
 
 
+PAGESIZE = 9
+
+
 class LogConfig:
     """경로 및 기본 설정"""
 
