@@ -31,7 +31,7 @@ async def create_contacts(db_session: DbSession, contact_in: ContactCreate):
 
 @router.get("/contacts/{contact_id}", response_model=GenericResponse[list])
 async def get_contact(contact_id: PrimaryKey, db_session: DbSession):
-    """연락처 조회"""
+    """연락처 조회a"""
     items = get(db_session=db_session, contact_id=contact_id)
     return GenericResponse.create(items=[items])
 
