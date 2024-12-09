@@ -12,7 +12,7 @@ router = APIRouter()
 
 @router.get("/contacts", response_model=GenericResponse[list])
 async def get_contacts(db_session: DbSession):
-    """연락처 리스트 조회"""
+    """연락처 리스트 조회a"""
     return GenericResponse.create(items=[])
 
 
