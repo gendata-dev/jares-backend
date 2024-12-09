@@ -1,10 +1,8 @@
 from sqlalchemy import select, insert, update as sa_update, delete as sa_delete
 from sqlalchemy.orm import Session
-from sqlalchemy.exc import IntegrityError
 
 from src.config import PAGESIZE
 from src.schema import PrimaryKey
-from src.contact.schema import Contact
 
 from .schema import Group, GroupCreate, GroupList
 

@@ -1,6 +1,5 @@
 from fastapi import APIRouter, HTTPException, status
 from sqlalchemy.exc import IntegrityError, DataError
-from typing import Dict
 
 from src.database import DbSession
 from src.schema import GenericResponse, PrimaryKey

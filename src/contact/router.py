@@ -4,7 +4,7 @@ from src.database import DbSession
 from src.schema import GenericResponse, PrimaryKey
 
 from .schema import ContactCreate
-from .service import get_contact, create_contact
+from .service import get, create
 
 router = APIRouter()
 """BASE_URL/contact-management"""
@@ -25,14 +25,14 @@ async def delete_contacts(db_session: DbSession):
 @router.post("/contacts", response_model=GenericResponse[list])
 async def create_contacts(db_session: DbSession, contact_in: ContactCreate):
     """연락처 생성"""
-    items = create_contact(db_session=db_session, contact_in=contact_in)
+    items = create(db_session=db_session, contact_in=contact_in)
     return GenericResponse.create(items=[items])
 
 
 @router.get("/contacts/{contact_id}", response_model=GenericResponse[list])
 async def get_contact(contact_id: PrimaryKey, db_session: DbSession):
     """연락처 조회"""
-    items = get_contact(db_session=db_session, contact_id=contact_id)
+    items = get(db_session=db_session, contact_id=contact_id)
     return GenericResponse.create(items=[items])
 
 
