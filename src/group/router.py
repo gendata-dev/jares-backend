@@ -22,7 +22,7 @@ async def get_groups(db_session: DbSession, page: int = 0):
         except DataError:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"유효하지 않는 페이지 잆니다 page:{page}",
+                detail=f"유효하지 않는 페이지 압니다 page:{page}",
             )
 
     return GenericResponse.create(items=groups)
