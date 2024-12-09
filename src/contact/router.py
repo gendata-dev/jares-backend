@@ -44,5 +44,5 @@ async def update_contact(contact_id: int, db_session: DbSession):
 
 @router.post("/contacts/import", response_model=GenericResponse[list])
 async def batch_create_contacts(db_session: DbSession):
-    """연락처 파일 업로드 및 저장"""
+    """연락처 파일 업로드 및 저장a"""
     return GenericResponse.create(items=[])
