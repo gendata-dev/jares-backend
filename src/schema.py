@@ -1,13 +1,14 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, conint
 from sqlalchemy.orm import DeclarativeBase
 from typing import Generic, TypeVar, List, Optional
 
 
+PrimaryKey = conint(gt=0, lt=2147483647)
+T = TypeVar("T")
+
+
 class TableBase(DeclarativeBase):
     pass
-
-
-T = TypeVar("T", bound=BaseModel)
 
 
 class MetaData(BaseModel):

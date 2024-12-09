@@ -1,7 +1,10 @@
 from fastapi import APIRouter
 
 from src.database import DbSession
-from src.schema import GenericResponse
+from src.schema import GenericResponse, PrimaryKey
+
+from .schema import ContactCreate
+from .service import get_contact, create_contact
 
 router = APIRouter()
 """BASE_URL/contact-management"""
