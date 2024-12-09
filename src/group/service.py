@@ -1,4 +1,9 @@
-from sqlalchemy import select, insert, update as sa_update, delete as sa_delete
+from sqlalchemy import (
+    select as sa_select,
+    insert as sa_insert,
+    update as sa_update,
+    delete as sa_delete,
+)
 from sqlalchemy.orm import Session
 
 from src.config import PAGESIZE
@@ -9,7 +14,7 @@ from .schema import Group, GroupCreate, GroupList
 
 def get(*, db_session: Session, group_id: PrimaryKey) -> dict:
     """Gets a group by its id"""
-    statement = select(Group.id, Group.group_name).where(Group.id == group_id)
+    statement = sa_select(Group.id, Group.group_name).where(Group.id == group_id)
     result = db_session.execute(statement).mappings().first()
 
     return result
@@ -17,7 +22,7 @@ def get(*, db_session: Session, group_id: PrimaryKey) -> dict:
 
 def get_all(*, db_session: Session) -> list[dict]:
     """Returns all groups"""
-    statement = select(Group.id, Group.group_name).order_by(Group.id.desc())
+    statement = sa_select(Group.id, Group.group_name).order_by(Group.id.desc())
     result = db_session.execute(statement).mappings().fetchall()
 
     return result
@@ -27,7 +32,7 @@ def get_many(*, db_session: Session, page: int) -> list[dict]:
     """Gets a paginated list of groups"""
     offset = (page - 1) * PAGESIZE
     statement = (
-        select(Group.id, Group.group_name)
+        sa_select(Group.id, Group.group_name)
         .order_by(Group.id.desc())
         .limit(PAGESIZE)
         .offset(offset)
@@ -40,7 +45,7 @@ def get_many(*, db_session: Session, page: int) -> list[dict]:
 def create(*, db_session: Session, group_in: GroupCreate) -> dict:
     """Creates a new group"""
     statement = (
-        insert(Group)
+        sa_insert(Group)
         .values(group_name=group_in.groupName)
         .returning(Group.id, Group.group_name)
     )
