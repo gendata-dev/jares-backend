@@ -10,11 +10,12 @@ from alembic import context
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../src")))
 
-from src.schema import TableBase
 from src.config import DBConfig
+from src.schema import TableBase
 from src.call.schema import Answer, CallLog
 from src.auth.schema import User
 from src.group.schema import Group
+from src.question.schema import Question, QuestionCategory
 from src.contact.schema import (
     Contact,
     Crop,
@@ -23,7 +24,8 @@ from src.contact.schema import (
     ContactEquipment,
 )
 from src.routine.schema import Routine
-from src.survey.schema import Question, Survey, Llm
+from src.survey.schema import Survey, SurveyQuestionCategory
+from src.language_model.schema import LanguageModel
 
 
 # this is the Alembic Config object, which provides
