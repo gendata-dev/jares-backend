@@ -9,6 +9,8 @@ from src.group.router import router as group_router
 from src.survey.router import router as survey_router
 from src.contact.router import router as contact_router
 from src.routine.router import router as routine_router
+from src.question.router import router as question_router
+from src.language_model.router import router as language_model_router
 
 from src.config import LogConfig
 from src.database import connect_db, disconnect_db
@@ -20,9 +22,13 @@ app = FastAPI()
 app.include_router(call_router, prefix="/v1", tags=["call"])
 app.include_router(auth_router, prefix="/user-management", tags=["auth"])
 app.include_router(group_router, prefix="/contact-management", tags=["group"])
-app.include_router(survey_router, prefix="/survey-management", tags=["survey"])
 app.include_router(contact_router, prefix="/contact-management", tags=["contact"])
+app.include_router(survey_router, prefix="/survey-management", tags=["survey"])
+app.include_router(question_router, prefix="/question-management", tags=["question"])
 app.include_router(routine_router, prefix="/routine-management", tags=["routine"])
+app.include_router(
+    language_model_router, prefix="/llm-management", tags=["language_model"]
+)
 
 
 @asynccontextmanager

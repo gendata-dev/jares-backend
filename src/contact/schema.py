@@ -1,9 +1,9 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Text, PrimaryKeyConstraint
 from sqlalchemy.orm import relationship
 from pydantic import BaseModel
+from typing import Optional
 
 from src.schema import TableBase, PrimaryKey
-from src.routine.schema import Routine  # noqa
 
 
 class Contact(TableBase):
@@ -11,6 +11,7 @@ class Contact(TableBase):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(10), nullable=False)
+    # TODO: NEED UNIQUE
     phone = Column(String(20), nullable=False)
     region = Column(String(50), nullable=False)
     preferred_call_time = Column(Text, nullable=True)
@@ -26,6 +27,7 @@ class Crop(TableBase):
     __tablename__ = "crops"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
+    # TODO: NEED UNIQUE
     name = Column(String(50), nullable=False)
 
     contact_crops = relationship("ContactCrop", back_populates="crops")
@@ -84,6 +86,12 @@ class ContactGroup(TableBase):
 
 class ContactRead(BaseModel):
     id: PrimaryKey
+    name: str
+    phone: str
+    region: str
+    preferredCallTime: str
+    groups: list[dict]
+    crops: list[dict]
 
 
 class ContactCreate(BaseModel):
@@ -92,7 +100,8 @@ class ContactCreate(BaseModel):
     region: str
     # <HHMM> like 1930
     preferredCallTime: str
-    # groupId: list[int]
+    groupIds: Optional[list[PrimaryKey]] = None
+    crops: Optional[list[str]] = None
 
 
 class ContactUpdate(BaseModel):
@@ -100,4 +109,4 @@ class ContactUpdate(BaseModel):
 
 
 class ContactDelete(BaseModel):
-    pass
+    contactIds: Optional[list[PrimaryKey]]

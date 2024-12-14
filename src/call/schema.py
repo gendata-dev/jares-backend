@@ -6,10 +6,9 @@ from typing_extensions import TypedDict
 from uuid import uuid4
 from enum import Enum as PyEnum
 
-from src.contact.schema import Contact  # noqa
-from src.group.schema import Group  # noqa
-from src.survey.schema import Question  # noqa
 from src.schema import TableBase
+from src.question.schema import Question
+
 
 """
 call_id	string	call unique id
@@ -170,8 +169,8 @@ class Answer(TableBase):
     __tablename__ = "answers"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    question_id = Column(Integer, ForeignKey("questions.id"), nullable=False)
     contact_id = Column(Integer, ForeignKey("contacts.id"), nullable=False)
+    question_id = Column(Integer, ForeignKey("questions.id"), nullable=False)
     answer_list = Column(JSON, nullable=False)
     created_at = Column(
         TIMESTAMP(timezone=True), server_default=func.now(), nullable=False

@@ -1,61 +1,67 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException, status
+from sqlalchemy.exc import IntegrityError, DataError
 
 from src.database import DbSession
-from src.schema import GenericResponse
+from src.schema import GenericResponse, PrimaryKey
+
+from .schema import SurveyRead, SurveyCreate
+from .service import get, get_all, get_many, create
 
 router = APIRouter()
 """BASE_URL/survey-management"""
 
 
-@router.get("/surveys", response_model=GenericResponse[list])
-async def get_surveys(db_session: DbSession):
+@router.get("/surveys/{survey_id}", response_model=GenericResponse[SurveyRead])
+def get_survey(db_session: DbSession, survey_id: PrimaryKey):
+    """설문 조회"""
+    survey = get(db_session=db_session, survey_id=survey_id)
+    if survey is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"존재하지 않는 id 입니다 id:{survey_id}",
+        )
+
+    return GenericResponse.create(items=[survey])
+
+
+@router.get("/surveys", response_model=GenericResponse[SurveyRead])
+def get_surveys(db_session: DbSession, page: int = 0):
     """설문 리스트 조회"""
+    if page == 0:
+        surveys = get_all(db_session=db_session)
+    else:
+        try:
+            surveys = get_many(db_session=db_session, page=page)
+        except DataError:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"유효하지 않는 페이지 입니다 page:{page}",
+            )
+
+    return GenericResponse.create(items=[surveys])
+
+
+@router.post("/surveys", response_model=GenericResponse[SurveyRead])
+def create_survey(db_session: DbSession, survey_in: SurveyCreate):
+    """설문 생성"""
+    try:
+        survey = create(db_session=db_session, survey_in=survey_in)
+    except IntegrityError:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=f"{survey_in.name}은 이미 사용중인 이름입니다",
+        )
+
     return GenericResponse.create(items=[])
 
 
-@router.post("/surveys", response_model=GenericResponse[list])
-async def create_surveys(db_session: DbSession):
-    """설문 리스트 생성"""
-    return GenericResponse.create(items=[])
-
-
-@router.delete("/surveys", response_model=GenericResponse[list])
-async def delete_surveys(db_session: DbSession):
+@router.delete("/surveys", response_model=GenericResponse[SurveyRead])
+def delete_surveys(db_session: DbSession):
     """설문 리스트 삭제"""
     return GenericResponse.create(items=[])
 
 
-@router.get("/surveys/{survey_id}", response_model=GenericResponse[list])
-async def get_survey(survey_id: int, db_session: DbSession):
-    """설문 조회"""
-    return GenericResponse.create(items=[])
-
-
-@router.put("/surveys/{survey_id}", response_model=GenericResponse[list])
-async def update_survey(survey_id: int, db_session: DbSession):
+@router.put("/surveys/{survey_id}", response_model=GenericResponse[SurveyRead])
+def update_survey(survey_id: int, db_session: DbSession):
     """설문 수정"""
-    return GenericResponse.create(items=[])
-
-
-@router.get("/surveys/{survey_id}/questions", response_model=GenericResponse[list])
-async def get_questions(survey_id: int, db_session: DbSession):
-    """질문 리스트 조회"""
-    return GenericResponse.create(items=[])
-
-
-@router.post("/surveys/{survey_id}/questions", response_model=GenericResponse[list])
-async def create_questions(survey_id: int, db_session: DbSession):
-    """질문 생성"""
-    return GenericResponse.create(items=[])
-
-
-@router.delete("/surveys/{survey_id}/questions", response_model=GenericResponse[list])
-async def delete_questions(survey_id: int, db_session: DbSession):
-    """질문 삭제"""
-    return GenericResponse.create(items=[])
-
-
-@router.put("/surveys/{survey_id}/questions", response_model=GenericResponse[list])
-async def update_questions(survey_id: int, db_session: DbSession):
-    """질문 수정"""
     return GenericResponse.create(items=[])
