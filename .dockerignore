@@ -1,4 +1,9 @@
 .git
 .gitignore
+.ruff_cache
+log
 Dockerfile
 venv
+__pycache__
+*.pyc
+test/
