@@ -1,11 +1,21 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Date
+from sqlalchemy import (
+    Column,
+    Integer,
+    String,
+    ForeignKey,
+    Boolean,
+    Date,
+    ARRAY,
+)
 from sqlalchemy.orm import relationship
 from pydantic import BaseModel
-from datetime import datetime
+from datetime import date
+from typing import Optional
 
 from src.schema import TableBase, PrimaryKey
 
 
+# TODO: NEED TO ADD CONSTRAINT 'execution_days'
 class Routine(TableBase):
     __tablename__ = "routines"
 
@@ -19,7 +29,8 @@ class Routine(TableBase):
     start_date = Column(Date, nullable=False)
     end_date = Column(Date, nullable=False)
     active_status = Column(Boolean, default=True, nullable=False)
-    day_of_the_week = Column(String(20), nullable=False)
+    execution_days = Column(ARRAY(String(3)), nullable=False)
+    execution_count = Column(Integer, default=0)
     # start_time = Column(Integer, nullable=False)
 
     groups = relationship("Group", back_populates="routines")
@@ -31,25 +42,33 @@ class Routine(TableBase):
 
 
 class RoutineCreate(BaseModel):
-    group_id: PrimaryKey
-    survey_id: PrimaryKey
-    llm_id: PrimaryKey
+    groupId: PrimaryKey
+    surveyId: PrimaryKey
+    languageModelId: PrimaryKey
     name: str
-    start_date: datetime
-    end_date: datetime
-    active_status: bool
+    startDate: date
+    endDate: date
+    activeStatus: bool
     # TODO: BE ENUM
-    day_of_week: str
+    executionDays: list[str]
+
     # start_time: int
 
 
 class RoutineRead(BaseModel):
     id: PrimaryKey
-    group_id: PrimaryKey
-    survey_id: PrimaryKey
-    llm_id: PrimaryKey
     name: str
-    start_date: datetime
-    end_date: datetime
-    active_status: bool
-    day_of_week: str
+    groupId: PrimaryKey
+    groupName: Optional[str] = None
+    surveyId: PrimaryKey
+    surveyName: Optional[str] = None
+    languageModelId: PrimaryKey
+    languageModelName: Optional[str] = None
+    startDate: date
+    endDate: date
+    activeStatus: bool
+    executionDays: list[str]
+
+
+class RoutineDelete(BaseModel):
+    routineIds: list[PrimaryKey]

@@ -16,7 +16,15 @@ from src.config import LogConfig
 from src.database import connect_db, disconnect_db
 
 
-app = FastAPI()
+app = FastAPI(
+    title="JARES",
+    description="Welcome to JARES's API documentation! Here you will able to discover all of the ways you can interact with the JARES API.",
+    root_path="/api",
+    # TODO: None in prod
+    docs_url="/docs",
+    redoc_url="/redoc",
+    openapi_url="/docs/openapi.json",
+)
 
 """ 라우터 추가 """
 app.include_router(call_router, prefix="/v1", tags=["call"])

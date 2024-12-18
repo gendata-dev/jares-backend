@@ -49,7 +49,7 @@ def create_group(db_session: DbSession, group_in: GroupCreate):
     except IntegrityError:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
-            detail=f"{group_in.name}은 이미 사용중인 이름입니다",
+            detail=f"이미 사용중인 이름입니다 name: {group_in.name}",
         )
 
     return GenericResponse.create(items=[group])

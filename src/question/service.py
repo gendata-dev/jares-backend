@@ -1,16 +1,13 @@
 from sqlalchemy import (
     select as sa_select,
     insert as sa_insert,
-    update as sa_update,
-    delete as sa_delete,
 )
-from sqlalchemy.orm import Session, aliased
-from sqlalchemy.sql import func
+from sqlalchemy.orm import Session
 
 from src.config import PAGESIZE
 from src.schema import PrimaryKey
 
-from .schema import Question, QuestionCategory, QuestionCreate, QuestionRead
+from .schema import QuestionCategory, QuestionCreate
 
 
 def get(*, db_session: Session, question_category_id: PrimaryKey) -> dict:
@@ -29,7 +26,7 @@ def get_all(*, db_session: Session) -> list[dict]:
         QuestionCategory.id.desc()
     )
 
-    result = db_session.execute(statement).mappings.first()
+    result = db_session.execute(statement).mappings().fetchall()
     return result
 
 
@@ -43,7 +40,7 @@ def get_many(*, db_session: Session, page: int) -> list[dict]:
         .offset(offset)
     )
 
-    result = db_session.execute(statement).mappings.first()
+    result = db_session.execute(statement).mappings().fetchall()
     return result
 
 
@@ -55,7 +52,7 @@ def create(*, db_session: Session, question_in: QuestionCreate) -> dict:
             category=question_in.category,
             question_list=question_in.questionList,
         )
-        .returning(Question.__table__)
+        .returning(QuestionCategory.__table__)
     )
 
     result = db_session.execute(statement).mappings().first()
@@ -65,14 +62,16 @@ def create(*, db_session: Session, question_in: QuestionCreate) -> dict:
 
 
 def update(
-    *, db_session: Session, group_id: PrimaryKey, question_in: QuestionCreate
+    *, db_session: Session, question_id: PrimaryKey, question_in: QuestionCreate
 ) -> dict:
-    """Updates an existing questions"""
+    """Updates an existing question"""
     # statement = (
-    #     sa_update(Group)
-    #     .where(Group.id == group_id)
-    #     .values(name=group_in.name)
-    #     .returning(Group.id, Group.name)
+    #     sa_update(Question)
+    #     .where(Question.id == question_id)
+    #     .values(
+    #         name=question_in.name
+    #     )
+    #     .returning(question.id, question.name)
     # )
     # result = db_session.execute(statement).mappings().first()
     # db_session.commit()
