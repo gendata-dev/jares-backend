@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, JSON, TIMESTAMP, ForeignKey, String, ARRAY
+from sqlalchemy import Column, Integer, TIMESTAMP, ForeignKey, String, ARRAY
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from pydantic import BaseModel
@@ -16,6 +16,7 @@ class QuestionCategory(TableBase):
     question_list = Column(ARRAY(String(100)))
 
 
+# DEPRECATED
 class Question(TableBase):
     __tablename__ = "questions"
 
@@ -30,12 +31,12 @@ class Question(TableBase):
     # is_deleted = bool
 
     answers = relationship("Answer", back_populates="questions")
-    surveys = relationship(
-        "Survey",
-        back_populates="questions",
-        primaryjoin="Question.survey_id == Survey.id",
-    )
-    question_categories = relationship("QuestionCategory", back_populates="questions")
+    # surveys = relationship(
+    #     "Survey",
+    #     back_populates="questions",
+    #     primaryjoin="Question.survey_id == Survey.id",
+    # )
+    # question_categories = relationship("QuestionCategory", back_populates="questions")
 
 
 class QuestionRead(BaseModel):

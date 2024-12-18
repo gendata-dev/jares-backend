@@ -1,6 +1,5 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, PrimaryKeyConstraint
 from sqlalchemy.orm import relationship
-from sqlalchemy.sql import func
 from pydantic import BaseModel
 
 from src.schema import TableBase, PrimaryKey
@@ -38,3 +37,7 @@ class SurveyRead(BaseModel):
 class SurveyCreate(BaseModel):
     name: str
     questionCategories: list[PrimaryKey]
+
+
+class SurveyDelete(BaseModel):
+    surveyIds: list[PrimaryKey]

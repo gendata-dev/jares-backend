@@ -38,18 +38,18 @@ def get_questions(db_session: DbSession, page: int = 0):
                 detail=f"유효하지 않는 페이지 입니다 page:{page}",
             )
 
-    return GenericResponse.create(items=[questions])
+    return GenericResponse.create(items=questions)
 
 
 @router.post("/questions", response_model=GenericResponse[QuestionRead])
-def create_questions(db_session: DbSession, question_in: QuestionCreate):
+def create_question(db_session: DbSession, question_in: QuestionCreate):
     """질문 생성"""
     try:
         question = create(db_session=db_session, question_in=question_in)
     except IntegrityError:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
-            detail=f"{question_in.name}은 이미 사용중인 이름입니다",
+            detail=f"이미 사용중인 이름입니다 category: {question_in.category}",
         )
 
     return GenericResponse.create(items=[question])
@@ -62,7 +62,7 @@ def update_questions(
     """질문 수정"""
     try:
         question = update(
-            db_session=db_session, question_id=question_id, group_in=group_in
+            db_session=db_session, question_id=question_id, question_in=question_in
         )
         if question is None:
             raise HTTPException(

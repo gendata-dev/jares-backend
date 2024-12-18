@@ -7,7 +7,6 @@ from uuid import uuid4
 from enum import Enum as PyEnum
 
 from src.schema import TableBase
-from src.question.schema import Question
 
 
 """

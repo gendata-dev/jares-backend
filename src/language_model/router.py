@@ -30,6 +30,7 @@ def get_language_model(db_session: DbSession, language_model_id: PrimaryKey):
 @router.get("/language-models", response_model=GenericResponse[LanguageModelRead])
 def get_language_models(db_session: DbSession, page: int = 0):
     """언어 모델 리스트 조회"""
+    # TODO -> GET_ALL if state
     try:
         language_models = get_many(db_session=db_session, page=page)
     except DataError:
@@ -53,7 +54,7 @@ def create_language_model(
     except IntegrityError:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
-            detail=f"{language_model.name}은 이미 사용중인 이름입니다",
+            detail=f"이미 사용중인 이름입니다 name: {language_model_in.name}",
         )
 
     return GenericResponse.create(items=[language_model])

@@ -11,7 +11,7 @@ class User(TableBase):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    username = Column(String(50), unique=True, nullable=False)
+    name = Column(String(50), unique=True, nullable=False)
     password_hash = Column(String(255), nullable=False)
     is_active = Column(Boolean, default=True, nullable=False)
     created_at = Column(TIMESTAMP(timezone=True), server_default=func.now())
@@ -37,8 +37,8 @@ class Session(TableBase):
     users = relationship("User", back_populates="sessions")
 
 
-class UserLoginRequest(BaseModel):
-    userID: str
+class UserCreate(BaseModel):
+    name: str
     password: str
 
     @field_validator("password")
@@ -48,6 +48,17 @@ class UserLoginRequest(BaseModel):
         return v
 
 
-class UserResponse(BaseModel):
-    userID: int
-    username: str
+class UserLogin(BaseModel):
+    name: str
+    password: str
+
+    @field_validator("password")
+    def password_required(cls, v):
+        if not v:
+            raise ValueError("Must not be empty string")
+        return v
+
+
+class UserRead(BaseModel):
+    name: str
+    isActive: bool
